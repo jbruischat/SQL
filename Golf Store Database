@@ -1,0 +1,27 @@
+--Create a golf store database
+
+CREATE TABLE golf_store (id INTEGER PRIMARY KEY, name TEXT, quantity INTEGER, price INTEGER, aisle INTEGER);
+
+INSERT INTO golf_store VALUES (1, "Drivers", 15, 250, 1);
+INSERT INTO golf_store VALUES (2, "Wedges", 10, 150, 3);
+INSERT INTO golf_store VALUES (3, "Balls", 100, 50, 4);
+INSERT INTO golf_store VALUES (4, "Tees", 1000, 5, 2);
+INSERT INTO golf_store VALUES (5, "Irons", 5, 450, 3);
+INSERT INTO golf_store VALUES (6, "Shirts", 15, 75, 5);
+INSERT INTO golf_store VALUES (7, "Shorts", 13, 55, 5);
+INSERT INTO golf_store VALUES (8, "Bags", 7, 125, 2);
+INSERT INTO golf_store VALUES (9, "Gloves", 8, 15, 4);
+INSERT INTO golf_store VALUES (10, "Umbrellas", 3, 20, 2);
+INSERT INTO golf_store VALUES (11, "Markers", 20, 10, 4);
+INSERT INTO golf_store VALUES (12, "Hats", 6, 35, 5);
+INSERT INTO golf_store VALUES (13, "Glasses", 4, 25, 2);
+INSERT INTO golf_store VALUES (14, "Shoes", 15, 135, 1);
+INSERT INTO golf_store VALUES (15, "Socks", 6, 15, 3);
+
+--display the database ordered by price.
+SELECT * FROM golf_store
+ORDER BY price asc;
+
+--what is the avg price of items in the golf store
+SELECT AVG(price)
+FROM golf_store
