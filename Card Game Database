@@ -1,3 +1,4 @@
+--Create a database of card games played
 CREATE TABLE card_games(id INTEGER PRIMARY KEY AUTOINCREMENT,
     date_played TEXT,
     game_name TEXT,
@@ -62,14 +63,16 @@ INSERT INTO card_games(date_played,game_name,player_name,score) VALUES ('2023/03
 INSERT INTO card_games(date_played,game_name,player_name,score) VALUES ('2023/03/25','Rummy','Winston',397);
 INSERT INTO card_games(date_played,game_name,player_name,score) VALUES ('2023/03/25','Rummy','Hopper',443);
 
-
+--Show total points scored in each game
 SELECT game_name, SUM(score) AS total_score FROM card_games
     GROUP BY game_name;
-    
+
+--Show average points scored in each game
 SELECT game_name, ROUND (avg(score)) AS avg_score FROM card_games
     GROUP BY game_name
     HAVING avg_score > 5;
 
+--Show whether the winning score was above or below average
 SELECT game_name, score,
     CASE
         WHEN score > 10 THEN "above avg"
@@ -78,6 +81,7 @@ SELECT game_name, score,
     END as "winning_score"
 FROM card_games;
 
+--Show how many winning scores were above or below average
 SELECT COUNT (*),
     CASE
             WHEN score > 10 THEN "above avg"
@@ -87,4 +91,5 @@ SELECT COUNT (*),
 FROM card_games
 GROUP BY winning_score;
 
+--Show all winning scores from Rummy that were above 200 points in decending order
 SELECT * FROM card_games WHERE game_name = "Rummy" OR game_name = "Crazy Eights" AND score > 200 ORDER BY score desc
