@@ -1,0 +1,94 @@
+#In this SQL, I am extracting data from a database containing multiple tables related to a digital media store. The data encompasses various aspects such as artists, albums, invoices, and customer information, allowing me to quantify statistics and gain insights into the store's operations.
+
+#1. Select the full name, country and customer ID for all customers who are NOT in the US.
+SELECT FirstName, LastName, Country, CustomerID
+FROM chinook.customers
+WHERE Country <> 'USA';
+
+#2. Select the full name, phone number and email address for all customers in France.
+SELECT FirstName, LastName, Phone, Email
+FROM chinook.customers
+WHERE Country = 'France';
+
+#3. Show the full name, complete billing address and invoice ID for all order made in the US in 2009.
+SELECT FirstName, LastName,
+BillingAddress, BillingCity,
+BillingState, BillingPostalCode, InvoiceID
+FROM chinook.customers cust
+LEFT JOIN chinook.invoices inv
+ON cust.CustomerId = inv.CustomerId
+WHERE Country = 'USA'
+AND InvoiceDate LIKE '2009%';
+
+#4. Show all employee info for everyone in the sales department.
+SELECT *
+FROM chinook.employees
+WHERE Title LIKE 'Sales%';
+
+#5. Select a unique list of billing countries
+SELECT DISTINCT BIllingCountry
+FROM chinook.invoices;
+
+#6. Show the invoices associated with each sales agent.
+SELECT FirstName, LastName, InvoiceId
+FROM chinook.employees emp
+JOIN chinook.customers cust
+ON emp.EmployeeId = cust.SupportRepId
+JOIN chinook.invoices inv
+ON inv.CustomerId = cust.CustomerId;
+
+#7. Show the total sales for each sales agent.
+SELECT FirstName, LastName, COUNT(InvoiceId) as TotalSales
+FROM chinook.employees emp
+JOIN chinook.customers cust
+ON emp.EmployeeId = cust.SupportRepId
+JOIN chinook.invoices inv
+ON inv.CustomerId = cust.CustomerId
+GROUP BY emp.EmployeeId;
+
+#8. Show how many invoices there were in 2009.
+SELECT COUNT(*)
+FROM chinook.invoices
+WHERE InvoiceDate LIKE '2009%';
+
+#10. What was the total revenue in 2010?
+SELECT SUM(Total) as TotalRevenue
+FROM chinook.Invoices
+WHERE InvoiceDate LIKE '2010%';
+
+#11. Which track had the most sales and how many sales did it have?
+SELECT Name as TrackName
+, COUNT(invoices.InvoiceId) as TotalSales
+FROM chinook.tracks tracks
+JOIN chinook.invoice_items items
+ON tracks.TrackId = items.TrackId
+JOIN chinook.invoices invoices
+ON invoices.InvoiceId = items.InvoiceId
+GROUP BY Name
+ORDER BY TotalSales desc
+LIMIT 1;
+
+#12. List all tracks in alphabetical order. Include the album, media type and genre.
+SELECT t.Name as TrackName
+, a.Title as AlbumTitle
+, m.Name as MediaType
+, g.Name as Genre
+FROM chinook.tracks t
+JOIN chinook.albums a
+ON t.AlbumId = a.AlbumId
+JOIN chinook.media_types m
+ON t.MediaTypeId = m.MediaTypeId
+JOIN chinook.genres g
+ON t.GenreId = g.GenreId
+ORDER BY t.Name;
+
+#13. How many tracks were purchased in each country? Order them from most to least.
+SELECT c.Country
+, COUNT(i.InvoiceId) AS TotalTracksPurchased
+FROM chinook.customers c
+JOIN chinook.invoices i
+ON c.CustomerId = i.CustomerId
+JOIN chinook.invoice_items ii
+ON i.InvoiceId = ii.InvoiceId
+GROUP BY c.Country
+ORDER BY TotalTracksPurchased desc;
