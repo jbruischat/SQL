@@ -63,29 +63,55 @@ VALUES
 # The following SQL was written to answer specific questions about the content on Netflix:
 
 #1. How many movie titles are there in the database? (movies only)
-SELECT COUNT(*)
-FROM "netflix_titles_info"
-WHERE type = 'Movie';
+select
+	count(*)
+from
+	"netflix_titles_info" t
+where
+	t.type = 'Movie';
 
 #2. When was the most recent batch of tv shows and/or movies added to the database?
-SELECT MAX(date(date_added))
-FROM "netflix_titles_info";
+select
+	max(date(date_added)) as most_recently_added
+from
+	"netflix_titles_info";
 
 #3. List all the movies and tv shows in alphabetical order.
-SELECT "title"
-FROM "netflix_titles_info"
-ORDER BY title asc;
+select
+	t.title
+from
+	"netflix_titles_info" t
+order by
+	t.title;
 
 #4. Who was the director for the movie "The Starling"?
-SELECT "title", "director"
-FROM "netflix_titles_info" titles
-LEFT JOIN "netflix_people" people
-ON titles.show_id = people.show_id
-WHERE "title" = 'The Starling';
+select
+	t.title
+  , p.director
+from
+	"netflix_titles_info" t
+left join
+	"netflix_people" p
+on
+	t.show_id = p.show_id
+where
+	t.title = 'The Starling';
 
 #5. What is the oldest movie in the database and what year was it made?
-SELECT "title", "release_year"
-FROM "netflix_titles_info"
-WHERE type = 'Movie'
-ORDER BY "release_year" asc
-LIMIT 1;
+select
+	t.title
+  , t.release_year
+from
+	"netflix_titles_info" t
+where
+	t.type = 'Movie'
+and
+	t.release_year <=
+    	(
+          select
+          	min(release_year)
+          from
+          	"netflix_titles_info" t
+          where
+          	t.type = 'Movie'
+          );
