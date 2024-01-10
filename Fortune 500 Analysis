@@ -59,42 +59,63 @@ VALUES
 #Analysis:
 
 # Which companies have healthcare benefits AND at least 15 paid days off?
-SELECT company_name, paid_time_off_days
-FROM fortune_companies
-WHERE paid_time_off_days>=15
-AND healthcare_benefits=1
-ORDER BY paid_time_off_days desc
-;
+select
+	f.company_name
+  , f.paid_time_off_days
+from
+	fortune_companies f
+where
+	f.paid_time_off_days >= 15
+and
+	healthcare_benefits = 1
+order by
+	paid_time_off_days desc;
 
 # Assign all companies in the Technology and Finance industries as having "exceptional benefits", "average benefits", or "terrible benefits" based on the paid time off days offered. 
-SELECT company_name,
-CASE
-  WHEN paid_time_off_days >=20 THEN "exceptional benefits"
-  WHEN paid_time_off_days >=15 THEN "average benefits"
-  ElSE "terrible benefits"
-END AS vacation_benefits
-FROM fortune_companies
-WHERE industry="Technology"
-OR industry="Finance"
-;
+select
+	f.company_name
+  , case
+  		when f.paid_time_off_days >= 20 then 'exceptional benefits'
+        when f.paid_time_off_days >= 15 then 'average benefits'
+        else 'terrible benefits'
+    end as vacation_benefits
+from
+	fortune_companies f
+where
+	f.industry = 'Technology'
+or
+	f.industry = 'Finance';
 
 #Which companies have an average revenue of at least $250 billion and what are their average revenues?
-SELECT company_name, ROUND(AVG(revenue),1) AS avg_revenue_billions
-FROM fortune_companies
-GROUP BY company_name
-HAVING avg_revenue_billions>=250
-ORDER BY avg_revenue_billions desc
-;
+select
+	f.company_name
+  , round(avg(f.revenue), 1) as avg_revenue_billions
+from
+	fortune_companies f
+group by
+	f.company_name
+having
+	avg_revenue_billions >= 250
+order by
+	avg_revenue_billions desc;
 
 #Which company in the technology industry has the most revenue and what is their revenue?
-SELECT company_name, max(revenue)
-FROM fortune_companies
-WHERE industry = "Technology"
-;
+select
+	f.company_name
+  , max(revenue)
+from
+	fortune_companies f
+where
+	f.industry = 'Technology';
 
 #Does paid time off correlate to a higher average tenure in the healthcare industry?
-SELECT company_name, avg_employee_tenure, paid_time_off_days
-FROM fortune_companies
-WHERE industry = "Healthcare"
-ORDER BY avg_employee_tenure desc
-;
+select
+	f.company_name
+  , f.avg_employee_tenure
+  , f.paid_time_off_days
+from
+	fortune_companies f
+where
+	f.industry = 'Healthcare'
+order by
+	f.avg_employee_tenure desc;
