@@ -1,94 +1,168 @@
 #In this SQL, I am extracting data from a database containing multiple tables related to a digital media store. The data encompasses various aspects such as artists, albums, invoices, and customer information, allowing me to quantify statistics and gain insights into the store's operations.
 
 #1. Select the full name, country and customer ID for all customers who are NOT in the US.
-SELECT FirstName, LastName, Country, CustomerID
-FROM chinook.customers
-WHERE Country <> 'USA';
+select 
+  FirstName
+, LastName
+, Country
+, CustomerID
+from
+  chinook.customers
+where
+  Country <> 'USA';
 
 #2. Select the full name, phone number and email address for all customers in France.
-SELECT FirstName, LastName, Phone, Email
-FROM chinook.customers
-WHERE Country = 'France';
+select
+  FirstName
+, LastName
+, Phone
+, Email
+from
+  chinook.customers
+where
+  Country = 'France';
 
 #3. Show the full name, complete billing address and invoice ID for all order made in the US in 2009.
-SELECT FirstName, LastName,
-BillingAddress, BillingCity,
-BillingState, BillingPostalCode, InvoiceID
-FROM chinook.customers cust
-LEFT JOIN chinook.invoices inv
-ON cust.CustomerId = inv.CustomerId
-WHERE Country = 'USA'
-AND InvoiceDate LIKE '2009%';
+select
+  FirstName
+, LastName
+, BillingAddress
+, BillingCity
+, BillingState
+, BillingPostalCode
+, InvoiceID
+from
+  chinook.customers cust
+left join
+  chinook.invoices inv
+on
+  cust.CustomerId = inv.CustomerId
+where
+  Country = 'USA'
+and
+  InvoiceDate like '2009%';
 
 #4. Show all employee info for everyone in the sales department.
-SELECT *
-FROM chinook.employees
-WHERE Title LIKE 'Sales%';
+select
+  *
+from
+  chinook.employees
+where
+  Title like 'Sales%';
 
 #5. Select a unique list of billing countries
-SELECT DISTINCT BIllingCountry
-FROM chinook.invoices;
+select
+  distinct BIllingCountry
+from
+  chinook.invoices;
 
 #6. Show the invoices associated with each sales agent.
-SELECT FirstName, LastName, InvoiceId
-FROM chinook.employees emp
-JOIN chinook.customers cust
-ON emp.EmployeeId = cust.SupportRepId
-JOIN chinook.invoices inv
-ON inv.CustomerId = cust.CustomerId;
+select
+  FirstName
+, LastName
+, InvoiceId
+from
+  chinook.employees emp
+join
+  chinook.customers cust
+on
+  emp.EmployeeId = cust.SupportRepId
+join
+  chinook.invoices inv
+on
+  inv.CustomerId = cust.CustomerId;
 
 #7. Show the total sales for each sales agent.
-SELECT FirstName, LastName, COUNT(InvoiceId) as TotalSales
-FROM chinook.employees emp
-JOIN chinook.customers cust
-ON emp.EmployeeId = cust.SupportRepId
-JOIN chinook.invoices inv
-ON inv.CustomerId = cust.CustomerId
-GROUP BY emp.EmployeeId;
+select
+  FirstName
+, LastName
+, count(InvoiceId) as TotalSales
+from
+  chinook.employees emp
+join
+  chinook.customers cust
+on
+  emp.EmployeeId = cust.SupportRepId
+join
+  chinook.invoices inv
+on
+  inv.CustomerId = cust.CustomerId
+group by emp.EmployeeId;
 
 #8. Show how many invoices there were in 2009.
-SELECT COUNT(*)
-FROM chinook.invoices
-WHERE InvoiceDate LIKE '2009%';
+select
+  count(*)
+from
+  chinook.invoices
+where
+  InvoiceDate like '2009%';
 
 #10. What was the total revenue in 2010?
-SELECT SUM(Total) as TotalRevenue
-FROM chinook.Invoices
-WHERE InvoiceDate LIKE '2010%';
+select
+  sum(Total) as TotalRevenue
+from
+  chinook.Invoices
+where
+  InvoiceDate like '2010%';
 
 #11. Which track had the most sales and how many sales did it have?
-SELECT Name as TrackName
-, COUNT(invoices.InvoiceId) as TotalSales
-FROM chinook.tracks tracks
-JOIN chinook.invoice_items items
-ON tracks.TrackId = items.TrackId
-JOIN chinook.invoices invoices
-ON invoices.InvoiceId = items.InvoiceId
-GROUP BY Name
-ORDER BY TotalSales desc
-LIMIT 1;
+select
+  Name as TrackName
+, count(invoices.InvoiceId) as TotalSales
+from
+  chinook.tracks tracks
+join
+  chinook.invoice_items items
+on
+  tracks.TrackId = items.TrackId
+join
+  chinook.invoices invoices
+on
+  invoices.InvoiceId = items.InvoiceId
+group by
+  Name
+order by
+  TotalSales desc
+limit 1;
 
 #12. List all tracks in alphabetical order. Include the album, media type and genre.
-SELECT t.Name as TrackName
+select
+  t.Name as TrackName
 , a.Title as AlbumTitle
 , m.Name as MediaType
 , g.Name as Genre
-FROM chinook.tracks t
-JOIN chinook.albums a
-ON t.AlbumId = a.AlbumId
-JOIN chinook.media_types m
-ON t.MediaTypeId = m.MediaTypeId
-JOIN chinook.genres g
-ON t.GenreId = g.GenreId
-ORDER BY t.Name;
+from
+  chinook.tracks t
+join
+  chinook.albums a
+on
+  t.AlbumId = a.AlbumId
+join
+  chinook.media_types m
+on
+  t.MediaTypeId = m.MediaTypeId
+join
+  chinook.genres g
+on
+  t.GenreId = g.GenreId
+order by
+  t.Name;
 
 #13. How many tracks were purchased in each country? Order them from most to least.
-SELECT c.Country
-, COUNT(i.InvoiceId) AS TotalTracksPurchased
-FROM chinook.customers c
-JOIN chinook.invoices i
-ON c.CustomerId = i.CustomerId
-JOIN chinook.invoice_items ii
-ON i.InvoiceId = ii.InvoiceId
-GROUP BY c.Country
-ORDER BY TotalTracksPurchased desc;
+select
+  c.Country
+, count(i.InvoiceId) AS TotalTracksPurchased
+from
+  chinook.customers c
+join
+  chinook.invoices i
+on
+  c.CustomerId = i.CustomerId
+join
+  chinook.invoice_items ii
+on
+  i.InvoiceId = ii.InvoiceId
+group by
+  c.Country
+order by
+  TotalTracksPurchased desc;
