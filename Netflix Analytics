@@ -64,54 +64,54 @@ VALUES
 
 #1. How many movie titles are there in the database? (movies only)
 select
-	count(*)
+  count(*)
 from
-	"netflix_titles_info" t
+  "netflix_titles_info" t
 where
-	t.type = 'Movie';
+  t.type = 'Movie';
 
 #2. When was the most recent batch of tv shows and/or movies added to the database?
 select
-	max(date(date_added)) as most_recently_added
+  max(date(date_added)) as most_recently_added
 from
-	"netflix_titles_info";
+  "netflix_titles_info";
 
 #3. List all the movies and tv shows in alphabetical order.
 select
-	t.title
+  t.title
 from
-	"netflix_titles_info" t
+  "netflix_titles_info" t
 order by
-	t.title;
+  t.title;
 
 #4. Who was the director for the movie "The Starling"?
 select
-	t.title
-  , p.director
+  t.title
+, p.director
 from
-	"netflix_titles_info" t
+  "netflix_titles_info" t
 left join
-	"netflix_people" p
+  "netflix_people" p
 on
-	t.show_id = p.show_id
+  t.show_id = p.show_id
 where
-	t.title = 'The Starling';
+  t.title = 'The Starling';
 
 #5. What is the oldest movie in the database and what year was it made?
 select
-	t.title
-  , t.release_year
+  t.title
+, t.release_year
 from
-	"netflix_titles_info" t
+  "netflix_titles_info" t
 where
-	t.type = 'Movie'
+  t.type = 'Movie'
 and
-	t.release_year <=
-    	(
-          select
-          	min(release_year)
-          from
-          	"netflix_titles_info" t
-          where
-          	t.type = 'Movie'
-          );
+  t.release_year <=
+    (
+        select
+          min(release_year)
+        from
+          "netflix_titles_info" t
+        where
+          t.type = 'Movie'
+   );
