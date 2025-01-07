@@ -30,12 +30,12 @@ VALUES
 #Use a SELECT statement to order the items by price. --item and price listed by price in descending order--
 
 select
-    s.item_name
-  , s.price
+    item_name
+  , price
 from
-    superstore s
+    superstore 
 order by
-    s.price desc;
+    price desc;
 
 #Show a statistic about the item prices. --minimum and maximum prices of all products--
 
@@ -43,25 +43,25 @@ select
     min(price)
   , max(price)
 from
-    superstore s
+    superstore
 
 #Show a statistic about the price for the items in the category of "Kitchen Supplies". --average price of all items in kitchen supplies--
 
 select
     round(avg(price), 2) as kitchen_supplies_avg_price
 from
-    superstore s
+    superstore
 where
-    s.category = 'Kitchen Supplies';
+    category = 'Kitchen Supplies';
 
 #Show a statistic about the number of items in stock. --number of items in stock for all items in electronics--
 
 select
-    s.item_name
-  , s.stock_quantity
+    item_name
+  , stock_quantity
 from
-    superstore s
+    superstore
 where
-    s.category = 'Electronics'
+    category = 'Electronics'
 order by
-    s.stock_quantity desc;
+    stock_quantity desc;
